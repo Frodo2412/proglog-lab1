@@ -47,7 +47,7 @@ rangoAcumulado(N,X,[]):- X is (N+1).
 %L2 es una lista con el resto de los elementos de la lista L.
 tomar_n([],_,[],[]).
 tomar_n(L,0,[],L).
-
+tomar_n([X|L],N,[X|L1],L2) :- AUX is (N-1), tomar_n(L,AUX,L1,L2).
 
 %columna(+M,?C,?R) ← M es una matriz representada como lista de listas de
 %números, C es la primera columna de M en forma de lista y R es M sin la primera
@@ -80,7 +80,7 @@ primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
 	primeros_elementos(K, M, ElemsRec, RestoRec),
 	append(ElemsActual, ElemsRec, Ret).
 
-comparar_bloques([[]|_], [[]|_], _).
+comparar_bloques(B, [[]|_], _).
 comparar_bloques([Bloque | RestoBloques], KFilas, K) :- 
 	primeros_elementos(K, KFilas, Bloque, RestoFilas),
 	comparar_bloques(RestoBloques, RestoFilas, K).
@@ -89,10 +89,10 @@ chequear_solucion([], _, []).
 chequear_solucion(M, K, B) :-
 	tomar_n(M, K, KFilas, RestoFilas),
 	tomar_n(B, K, KBloques, RestoBloques),
+	comparar_bloques(KBloques, KFilas, K),
 	chequear_solucion(RestoFilas, K, RestoBloques).
 
 bloques(M, K, B) :-
 	N is K*K,
 	cuadro(B, N),
 	chequear_solucion(M, K, B).
-
