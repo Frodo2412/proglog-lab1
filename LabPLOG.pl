@@ -63,3 +63,37 @@ transpuesta([],[[]|_]).
 
 
 %------------------------------FIN EJERCICIO 1---------------------------------
+
+%------------------------------EJERCICIO 2-------------------------------------
+
+columnas([],_).
+columnas([X|Filas],N) :-
+	length(X, N),
+	columnas(Filas, N).
+
+cuadro(C, N) :- length(C, N), columnas(C, N).
+
+% Dado un K y una matriz M, F son los primeros K elementos de cada fila en una lista y R es la matriz M sin esos elementos.
+primeros_elementos(0, M, [], M).
+primeros_elementos(K, [], [], []).
+primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
+	tomar_n(FilaActual, K, ElemsActual, RestoActual),
+	primeros_elementos(K, M, ElemsRec, RestoRec),
+	append(ElemsActual, ElemsRec, Ret).
+
+comparar_bloques([[]|_], [[]|_], _).
+comparar_bloques([Bloque | RestoBloques], KFilas, K) :- 
+	primeros_elementos(K, KFilas, Bloque, RestoFilas),
+	comparar_bloques(RestoBloques, RestoFilas, K).
+
+chequear_solucion([], _, []).
+chequear_solucion(M, K, B) :-
+	tomar_n(M, K, KFilas, RestoFilas),
+	tomar_n(B, K, KBloques, RestoBloques),
+	chequear_solucion(RestoFilas, RestoBloques, K).
+
+bloques(M, K, B) :-
+	N is K*K,
+	cuadro(B, N),
+	chequear_solucion(M, K, B).
+
