@@ -45,7 +45,7 @@ rangoAcumulado(N,X,[]):- X is (N+1).
 
 %tomar_n(+L,+N,?L1,?L2) ← L1 es una lista con los primeros N elementos de la lista L, 
 %L2 es una lista con el resto de los elementos de la lista L.
-tomar_n([X|L],N,[X|L1],L2) :- AUX is (N-1), tomar_n(L,AUX,L1,L2).
+tomar_n([],_,[],[]).
 tomar_n(L,0,[],L).
 
 
@@ -74,8 +74,7 @@ columnas([X|Filas],N) :-
 cuadro(C, N) :- length(C, N), columnas(C, N).
 
 % Dado un K y una matriz M, F son los primeros K elementos de cada fila en una lista y R es la matriz M sin esos elementos.
-primeros_elementos(0, M, [], M).
-primeros_elementos(K, [], [], []).
+primeros_elementos(K, M, [], M).
 primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
 	tomar_n(FilaActual, K, ElemsActual, RestoActual),
 	primeros_elementos(K, M, ElemsRec, RestoRec),
@@ -90,7 +89,7 @@ chequear_solucion([], _, []).
 chequear_solucion(M, K, B) :-
 	tomar_n(M, K, KFilas, RestoFilas),
 	tomar_n(B, K, KBloques, RestoBloques),
-	chequear_solucion(RestoFilas, RestoBloques, K).
+	chequear_solucion(RestoFilas, K, RestoBloques).
 
 bloques(M, K, B) :-
 	N is K*K,
