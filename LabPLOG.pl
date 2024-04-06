@@ -95,4 +95,5 @@ chequear_solucion(M, K, B) :-
 bloques(M, K, B) :-
 	N is K*K,
 	cuadro(B, N),
+	cuadro(M, N), % Just for safety
 	chequear_solucion(M, K, B).
