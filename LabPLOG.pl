@@ -78,13 +78,14 @@ columnas([X|Filas],N) :-
 cuadro(C, N) :- length(C, N), columnas(C, N).
 
 % Dado un K y una matriz M, F son los primeros K elementos de cada fila en una lista y R es la matriz M sin esos elementos.
-primeros_elementos(K, M, [], M).
+primeros_elementos(_, [], [], []).
 primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
-	tomar_n(FilaActual, K, ElemsActual, RestoActual),
+    tomar_n(FilaActual, K, ElemsActual, RestoActual),
+	length(ElemsActual, K),
 	primeros_elementos(K, M, ElemsRec, RestoRec),
 	append(ElemsActual, ElemsRec, Ret).
 
-comparar_bloques(B, [[]|_], _).
+comparar_bloques(Res, [[]|_], _).
 comparar_bloques([Bloque | RestoBloques], KFilas, K) :- 
 	primeros_elementos(K, KFilas, Bloque, RestoFilas),
 	comparar_bloques(RestoBloques, RestoFilas, K).
@@ -123,7 +124,7 @@ sudoku(M, K) :-
 	% cuadro(M, N), % Just for safety
 	rango(N, Rango),
 	verificar_sudoku(Rango, M),
-	bloques(M, K, B),
-	verificar_sudoku(Rango, B),
+	% bloques(M, K, B),
+	% verificar_sudoku(Rango, B),
 	transpuesta(M, MTranspuesta),
 	verificar_sudoku(Rango, MTranspuesta).
