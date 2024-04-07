@@ -47,7 +47,6 @@ rangoAcc(N, Acc, R) :-
 
 %tomar_n(+L,+N,?L1,?L2) ← L1 es una lista con los primeros N elementos de la lista L, 
 %L2 es una lista con el resto de los elementos de la lista L.
-tomar_n([],_,[],[]).
 tomar_n(L,0,[],L).
 tomar_n([X|L],N,[X|L1],L2) :- 
 	AUX is (N-1), 
@@ -81,11 +80,10 @@ cuadro(C, N) :- length(C, N), columnas(C, N).
 primeros_elementos(_, [], [], []).
 primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
     tomar_n(FilaActual, K, ElemsActual, RestoActual),
-	length(ElemsActual, K),
 	primeros_elementos(K, M, ElemsRec, RestoRec),
 	append(ElemsActual, ElemsRec, Ret).
 
-comparar_bloques(Res, [[]|_], _).
+comparar_bloques([], [[]|_], _).
 comparar_bloques([Bloque | RestoBloques], KFilas, K) :- 
 	primeros_elementos(K, KFilas, Bloque, RestoFilas),
 	comparar_bloques(RestoBloques, RestoFilas, K).
