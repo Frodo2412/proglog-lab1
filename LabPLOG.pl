@@ -17,9 +17,8 @@ no_pertenece(X,[]).
 no_pertenece(X,[H|L]) :- no_pertenece(X,L),X\=H. 
 
 %elegir(?X,?L,?R) ← La lista R resulta de eliminar el elemento X de la lista L.
-
 elegir(X,[X|L],L).
-elegir(X,[H|L],[H|S]):-elegir(X,L,S).
+elegir(X,[H|L],[H|S]) :- elegir(X,L,S).
 
 %contenida(+L1,+L2) ← todos los elementos de L1 pertenecen a L2.
 
@@ -28,8 +27,10 @@ contenida([],L2).
 
 
 %permutacion(+L1,?L2) ← La lista L2 es una permutación de la lista L1.
-permutacion(L1,[H|L2]) :- elegir(H,L1,L3), permutacion(L3,L2).
 permutacion([],[]).
+permutacion([H|T], L) :- 
+	permutacion(T, T1), 
+	elegir(H, L, T1).
 
 %suma(+L,?S) ← S es la suma de los elementos de la lista L.
 suma(L,S) :- sumaAcumulada(L,0,S).
@@ -101,17 +102,30 @@ bloques(M, K, B) :-
 	cuadro(M, N), % Just for safety
 	chequear_solucion(M, K, B).
 
-verificar_permutaciones([], []).
-verificar_permutaciones(Lista, [ListaPermutada | RestoPermutaciones]) :-
-	permutacion(Lista, ListaPermutada),
-	verificar_permutaciones(Lista, RestoPermutaciones).
+filas_compatibles([],[]).
+filas_compatibles([H|T], [H1,T1]) :-
+	H \= H1,
+	filas_compatibles(T, T1).
+
+compatibles(_, []).
+compatibles(Fila, [Fila2|RestoFilas]) :-
+	filas_compatibles(Fila, Fila2),
+	compatibles(Fila, RestoFilas).
+
+verificar_sudoku(_, []). % Esto puede dar comportamientos inesperados.
+verificar_sudoku(Rango, [Fila|RestoFilas]) :-
+	permutacion(Fila, Rango),
+	verificar_sudoku(Rango, RestoFilas).
+	compatibles(Fila, RestoFilas).
 
 sudoku(M, K) :-
 	N is K*K,
+	cuadro(M, N), % Just for safety
 	rango(N, Rango),
+	verificar_sudoku(Rango, M),
 	bloques(M, K, B),
+	verificar_sudoku(Rango, B),
 	transpuesta(M, MTranspuesta),
-	verificar_permutaciones(Rango, M),
-	verificar_permutaciones(Rango, MTranspuesta),
-	verificar_permutaciones(Rango, B).
+	verificar_sudoku(Rango, MTranspuesta).
+
 
