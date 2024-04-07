@@ -110,18 +110,23 @@ compatibles(Fila, [Fila2|RestoFilas]) :-
 	filas_compatibles(Fila, Fila2),
 	compatibles(Fila, RestoFilas).
 
-verificar_sudoku(_, []). % Esto puede dar comportamientos inesperados.
-verificar_sudoku(Rango, [Fila|RestoFilas]) :-
+verificar_filas(_, []). % Esto puede dar comportamientos inesperados.
+verificar_filas(Rango, [Fila|RestoFilas]) :-
 	permutacion(Rango, Fila),
-	verificar_sudoku(Rango, RestoFilas),
+	verificar_filas(Rango, RestoFilas),
 	compatibles(Fila, RestoFilas).
+
+verificar_bloques(_, []).
+verificar_bloques(Rango, [Fila|RestoFilas]) :-
+	permutacion(Rango, Fila),
+	verificar_bloques(Rango, RestoFilas).
 
 sudoku(M, K) :-
 	N is K*K,
 	% cuadro(M, N), % Just for safety
 	rango(N, Rango),
-	verificar_sudoku(Rango, M),
+	verificar_filas(Rango, M),
 	bloques(M, K, B),
-	verificar_sudoku(Rango, B),
+	verificar_bloques(Rango, B),
 	transpuesta(M, MTranspuesta),
-	verificar_sudoku(Rango, MTranspuesta).
+	verificar_filas(Rango, MTranspuesta).
