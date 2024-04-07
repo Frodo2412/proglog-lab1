@@ -39,10 +39,11 @@ sumaAcumulada([X|L1],AC,S) :- AUX is (AC + X),sumaAcumulada(L1,AUX,S).
 sumaAcumulada([],S,S).
 
 %rango(+N,?R) ← R es la lista que contiene los elementos de 1 a N.
-rango(N,R) :- rangoAcumulado(N,1,R).
-%EL USO DEL ACUMULADOR PARA MAYOR EFICIENCIA.
-rangoAcumulado(N,AC,[AC|R]):- AC<N, AUX is (AC + 1),rangoAcumulado(N,AUX,R).
-rangoAcumulado(N,N,[N]).
+rango(N,R) :- rangoAcc(N,[],R).
+rangoAcc(0, Acc, Acc).
+rangoAcc(N, Acc, R) :-
+	N1 is N - 1,
+	rangoAcc(N1, [N | Acc], R).
 
 %tomar_n(+L,+N,?L1,?L2) ← L1 es una lista con los primeros N elementos de la lista L, 
 %L2 es una lista con el resto de los elementos de la lista L.
