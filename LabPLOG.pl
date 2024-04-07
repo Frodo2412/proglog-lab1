@@ -1,6 +1,6 @@
 :- discontiguous
         pertenece/2, no_pertenece/2,elegir/3,contenida/2,permutacion/2,
-    	suma/2,sumaAcumulada/3,rango/2,rangoAcumulado/3,
+    	suma/2,sumaAcumulada/3,rango/2,rangoAcc/3,
     	tomar_n/4,columna/3,transpuesta/2.
 
 %--------------------------------EJERCICIO 1 ------------------------------------------
@@ -38,16 +38,19 @@ sumaAcumulada([X|L1],AC,S) :- AUX is (AC + X),sumaAcumulada(L1,AUX,S).
 sumaAcumulada([],S,S).
 
 %rango(+N,?R) ← R es la lista que contiene los elementos de 1 a N.
-rango(N,R) :- rangoAcumulado(N,1,R).
-%EL USO DEL ACUMULADOR PARA MAYOR EFICIENCIA.
-rangoAcumulado(N,AC,[X|R]):- AC=:=X, AUX is (AC + 1),rangoAcumulado(N,AUX,R).
-rangoAcumulado(N,X,[]):- X is (N+1).
+rango(N,R) :- rangoAcc(N,[],R).
+rangoAcc(0, Acc, Acc).
+rangoAcc(N, Acc, R) :-
+	N1 is N - 1,
+	rangoAcc(N1, [N | Acc], R).
 
 %tomar_n(+L,+N,?L1,?L2) ← L1 es una lista con los primeros N elementos de la lista L, 
 %L2 es una lista con el resto de los elementos de la lista L.
 tomar_n([],_,[],[]).
 tomar_n(L,0,[],L).
-tomar_n([X|L],N,[X|L1],L2) :- AUX is (N-1), tomar_n(L,AUX,L1,L2).
+tomar_n([X|L],N,[X|L1],L2) :- 
+	AUX is (N-1), 
+	tomar_n(L,AUX,L1,L2).
 
 %columna(+M,?C,?R) ← M es una matriz representada como lista de listas de
 %números, C es la primera columna de M en forma de lista y R es M sin la primera
@@ -97,3 +100,18 @@ bloques(M, K, B) :-
 	cuadro(B, N),
 	cuadro(M, N), % Just for safety
 	chequear_solucion(M, K, B).
+
+verificar_permutaciones([], []).
+verificar_permutaciones(Lista, [ListaPermutada | RestoPermutaciones]) :-
+	permutacion(Lista, ListaPermutada),
+	verificar_permutaciones(Lista, RestoPermutaciones).
+
+sudoku(M, K) :-
+	N is K*K,
+	rango(N, Rango),
+	bloques(M, K, B),
+	transpuesta(M, MTranspuesta),
+	verificar_permutaciones(Rango, M),
+	verificar_permutaciones(Rango, MTranspuesta),
+	verificar_permutaciones(Rango, B).
+
