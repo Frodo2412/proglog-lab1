@@ -45,9 +45,9 @@ rangoAcumulado(N,X,[]):- X is (N+1).
 
 %tomar_n(+L,+N,?L1,?L2) ← L1 es una lista con los primeros N elementos de la lista L, 
 %L2 es una lista con el resto de los elementos de la lista L.
-tomar_n([X|L],N,[X|L1],L2) :- AUX is (N-1), tomar_n(L,AUX,L1,L2).
+tomar_n([],_,[],[]).
 tomar_n(L,0,[],L).
-
+tomar_n([X|L],N,[X|L1],L2) :- AUX is (N-1), tomar_n(L,AUX,L1,L2).
 
 %columna(+M,?C,?R) ← M es una matriz representada como lista de listas de
 %números, C es la primera columna de M en forma de lista y R es M sin la primera
@@ -63,3 +63,37 @@ transpuesta([],[[]|_]).
 
 
 %------------------------------FIN EJERCICIO 1---------------------------------
+
+%------------------------------EJERCICIO 2-------------------------------------
+
+columnas([],_).
+columnas([X|Filas],N) :-
+	length(X, N),
+	columnas(Filas, N).
+
+cuadro(C, N) :- length(C, N), columnas(C, N).
+
+% Dado un K y una matriz M, F son los primeros K elementos de cada fila en una lista y R es la matriz M sin esos elementos.
+primeros_elementos(K, M, [], M).
+primeros_elementos(K, [FilaActual|M], Ret, [RestoActual|RestoRec]) :-
+	tomar_n(FilaActual, K, ElemsActual, RestoActual),
+	primeros_elementos(K, M, ElemsRec, RestoRec),
+	append(ElemsActual, ElemsRec, Ret).
+
+comparar_bloques(B, [[]|_], _).
+comparar_bloques([Bloque | RestoBloques], KFilas, K) :- 
+	primeros_elementos(K, KFilas, Bloque, RestoFilas),
+	comparar_bloques(RestoBloques, RestoFilas, K).
+
+chequear_solucion([], _, []).
+chequear_solucion(M, K, B) :-
+	tomar_n(M, K, KFilas, RestoFilas),
+	tomar_n(B, K, KBloques, RestoBloques),
+	comparar_bloques(KBloques, KFilas, K),
+	chequear_solucion(RestoFilas, K, RestoBloques).
+
+bloques(M, K, B) :-
+	N is K*K,
+	cuadro(B, N),
+	cuadro(M, N), % Just for safety
+	chequear_solucion(M, K, B).
