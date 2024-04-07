@@ -103,7 +103,7 @@ bloques(M, K, B) :-
 	chequear_solucion(M, K, B).
 
 filas_compatibles([],[]).
-filas_compatibles([H|T], [H1,T1]) :-
+filas_compatibles([H|T], [H1|T1]) :-
 	H \= H1,
 	filas_compatibles(T, T1).
 
@@ -114,18 +114,16 @@ compatibles(Fila, [Fila2|RestoFilas]) :-
 
 verificar_sudoku(_, []). % Esto puede dar comportamientos inesperados.
 verificar_sudoku(Rango, [Fila|RestoFilas]) :-
-	permutacion(Fila, Rango),
-	verificar_sudoku(Rango, RestoFilas).
+	permutacion(Rango, Fila),
+	verificar_sudoku(Rango, RestoFilas),
 	compatibles(Fila, RestoFilas).
 
 sudoku(M, K) :-
 	N is K*K,
-	cuadro(M, N), % Just for safety
+	% cuadro(M, N), % Just for safety
 	rango(N, Rango),
 	verificar_sudoku(Rango, M),
 	bloques(M, K, B),
 	verificar_sudoku(Rango, B),
 	transpuesta(M, MTranspuesta),
 	verificar_sudoku(Rango, MTranspuesta).
-
-
