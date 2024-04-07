@@ -126,7 +126,7 @@ sudoku(M, K) :-
 	% cuadro(M, N), % Just for safety
 	rango(N, Rango),
 	verificar_filas(Rango, M),
-	bloques(M, K, B),
-	verificar_bloques(Rango, B),
 	transpuesta(M, MTranspuesta),
-	verificar_filas(Rango, MTranspuesta).
+	verificar_filas(Rango, MTranspuesta),
+	bloques(M, K, B),
+	verificar_bloques(Rango, B).
