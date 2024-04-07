@@ -1,19 +1,19 @@
 :- discontiguous
         pertenece/2, no_pertenece/2,elegir/3,contenida/2,permutacion/2,
-    	suma/2,sumaAcumulada/3,rango/2,rangoAcc/3,
+    	suma/2,sumaAcumulada/3,rango/2,rangoAcumulado/3,
     	tomar_n/4,columna/3,transpuesta/2.
 
 %--------------------------------EJERCICIO 1 ------------------------------------------
 
 %pertenece(?X,?L) <- El elemento X pertenece a la lista L.
 
-pertenece(X,[X|L]).
-pertenece(X,[H|L]) :- pertenece(X,L).
+pertenece(X,[X|_]).
+pertenece(X,[_|L]) :- pertenece(X,L).
 
 
 %no_pertenece(+X,+L) <- El elemento X no pertenece a la lista L.
 
-no_pertenece(X,[]).
+no_pertenece(_, []).
 no_pertenece(X,[H|L]) :- no_pertenece(X,L),X\=H. 
 
 %elegir(?X,?L,?R) ← La lista R resulta de eliminar el elemento X de la lista L.
@@ -23,7 +23,7 @@ elegir(X,[H|L],[H|S]) :- elegir(X,L,S).
 %contenida(+L1,+L2) ← todos los elementos de L1 pertenecen a L2.
 
 contenida([H|L1],L2) :- pertenece(H,L2) , contenida(L1,L2).
-contenida([],L2).
+contenida([], _).
 
 
 %permutacion(+L1,?L2) ← La lista L2 es una permutación de la lista L1.
