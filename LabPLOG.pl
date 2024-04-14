@@ -97,7 +97,6 @@ chequear_solucion(M, K, B) :-
 bloques(M, K, B) :-
 	N is K*K,
 	cuadro(B, N),
-	cuadro(M, N), % Just for safety
 	chequear_solucion(M, K, B).
 
 filas_compatibles([],[]).
@@ -112,7 +111,7 @@ compatibles(Fila, [Fila2|RestoFilas]) :-
 
 verificar_filas(_, []). % Esto puede dar comportamientos inesperados.
 verificar_filas(Rango, [Fila|RestoFilas]) :-
-	permutacion(Rango, Fila),
+	permutacion(Rango, Fila), % Con el uso del predicado built-in permutation/2 se resuelven Sudokus de orden 4.
 	verificar_filas(Rango, RestoFilas),
 	compatibles(Fila, RestoFilas).
 
@@ -123,7 +122,6 @@ verificar_bloques(Rango, [Fila|RestoFilas]) :-
 
 sudoku(M, K) :-
 	N is K*K,
-	% cuadro(M, N), % Just for safety
 	rango(N, Rango),
 	verificar_filas(Rango, M),
 	transpuesta(M, MTranspuesta),
