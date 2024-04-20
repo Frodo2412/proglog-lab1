@@ -109,25 +109,28 @@ filas_compatibles([H|T], [H1|T1]) :-
 	H \= H1,
 	filas_compatibles(T, T1).
 
-
-
 % compatibles(+F,+L) <- Verifica que la fila F sea compatible con el resto de las Filas L de la Matriz. Se utiliza para descartar soluciones antes de tiempo.
 compatibles(_, []).
 compatibles(Fila, [Fila2|RestoFilas]) :-
 	filas_compatibles(Fila, Fila2),
 	compatibles(Fila, RestoFilas).
 
+verificar_fila(_, []).
+verificar_fila(Rango, [H|T]) :-
+	elegir(H, Rango, RangoRestante),
+	verificar_fila(RangoRestante, T).
+
 % verificar_filas(+Rango,+Filas) <- Verifica que las listas en Filas sean permutaciones compatibles de los elementos de Rango.
 verificar_filas(_, []).
 verificar_filas(Rango, [Fila|RestoFilas]) :-
-	permutacion(Rango, Fila), % Con el uso del predicado built-in permutation/2 se resuelven Sudokus de orden 4.
-	verificar_filas(Rango, RestoFilas),
-	compatibles(Fila, RestoFilas).
+	verificar_fila(Rango, Bloque),
+	compatibles(Fila, RestoFilas),
+	verificar_filas(Rango, RestoFilas).
 
 % verificar_bloques(+Rango,+B) <- Verifica que todos los bloques de B sean permutaciones de Rango.
 verificar_bloques(_, []).
 verificar_bloques(Rango, [Fila|RestoFilas]) :-
-	permutacion(Rango, Fila),
+	verificar_fila(Rango, Bloque),
 	verificar_bloques(Rango, RestoFilas).
 
 % sudoku(+M,+K) ← M es una matriz que representa un sudoku de orden K, el predicado es verdadero si M es un sudoku correcto resuelto.
