@@ -124,8 +124,9 @@ verificar_fila(Rango, [H|T]) :-
 verificar_filas(_, []).
 verificar_filas(Rango, [Fila|RestoFilas]) :-
 	verificar_fila(Rango, Fila),
-	compatibles(Fila, RestoFilas),
-	verificar_filas(Rango, RestoFilas).
+	verificar_filas(Rango, RestoFilas),
+	compatibles(Fila, RestoFilas).
+	
 
 % verificar_bloques(+Rango,+B) <- Verifica que todos los bloques de B sean permutaciones de Rango.
 verificar_bloques(_, []).
