@@ -123,14 +123,14 @@ verificar_fila(Rango, [H|T]) :-
 % verificar_filas(+Rango,+Filas) <- Verifica que las listas en Filas sean permutaciones compatibles de los elementos de Rango.
 verificar_filas(_, []).
 verificar_filas(Rango, [Fila|RestoFilas]) :-
-	verificar_fila(Rango, Bloque),
+	verificar_fila(Rango, Fila),
 	compatibles(Fila, RestoFilas),
 	verificar_filas(Rango, RestoFilas).
 
 % verificar_bloques(+Rango,+B) <- Verifica que todos los bloques de B sean permutaciones de Rango.
 verificar_bloques(_, []).
 verificar_bloques(Rango, [Fila|RestoFilas]) :-
-	verificar_fila(Rango, Bloque),
+	verificar_fila(Rango, Fila),
 	verificar_bloques(Rango, RestoFilas).
 
 % sudoku(+M,+K) ← M es una matriz que representa un sudoku de orden K, el predicado es verdadero si M es un sudoku correcto resuelto.
