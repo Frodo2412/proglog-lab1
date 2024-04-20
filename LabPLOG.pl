@@ -115,10 +115,11 @@ compatibles(Fila, [Fila2|RestoFilas]) :-
 	filas_compatibles(Fila, Fila2),
 	compatibles(Fila, RestoFilas).
 
+% verificar_fila(+Rango,?L) <- Verifica que una lista L sea una permutacion de un Rango en un tiempo menor al predicado permutacion.
 verificar_fila(_, []).
 verificar_fila(Rango, [H|T]) :-
-	elegir(H, Rango, RangoRestante),
-	verificar_fila(RangoRestante, T).
+elegir(H, Rango, RangoRestante),
+verificar_fila(RangoRestante, T).
 
 % verificar_filas(+Rango,+Filas) <- Verifica que las listas en Filas sean permutaciones compatibles de los elementos de Rango.
 verificar_filas(_, []).
